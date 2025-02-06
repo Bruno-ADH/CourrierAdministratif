@@ -20,7 +20,7 @@
 }
 
 a {
-  color: #007bff;
+  color: var(--bs-primary);
   text-decoration: none;
   cursor: pointer;
 }

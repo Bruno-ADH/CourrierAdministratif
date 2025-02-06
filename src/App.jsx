@@ -52,7 +52,7 @@ function AppLayout() {
   }
 
   return (
-    <div className="d-flex bg-info vw-100">
+    <div className="d-flex">
       <Navbar bg="primary" variant="dark" className="flex-column p-4" style={{ width: "250px", height: "100vh" }}>
         <Navbar.Brand>LOGO</Navbar.Brand>
         <Nav className="flex-column">
@@ -64,7 +64,7 @@ function AppLayout() {
       </Navbar>
 
       <Container className="p-4 bg-transparent">
-        {/* <Outlet />  */}
+        <Outlet /> 
       </Container>
     </div>
   );
