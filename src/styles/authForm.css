@@ -28,3 +28,10 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+@media only screen and (max-width: 767px) {
+  .custom-rounded {
+    border-bottom-left-radius: 2rem;
+    border-bottom-right-radius: 0;
+  }
+}

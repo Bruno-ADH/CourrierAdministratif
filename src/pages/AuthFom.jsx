@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { useNavigate } from 'react-router-dom';
 import "../styles/authForm.css";
@@ -14,6 +14,7 @@ const AuthForm = () => {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState({});
   const login = useAuthStore.use.login()
 
   const toggleForm = () =>{
@@ -26,8 +27,29 @@ const AuthForm = () => {
   };
 
   // Fonction de soumission du formulaire
+
+  const validateForm = () => {
+    let newErrors = {};
+    if (!isLogin && !formData.name.trim()) {
+      newErrors.name = "Le nom est requis.";
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = "L'email est requis.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "L'email n'est pas valide.";
+    }
+    if (!formData.password.trim()) {
+      newErrors.password = "Le mot de passe est requis.";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Le mot de passe doit contenir au moins 6 caractères.";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     login()
     navigate('/dashboard');
     console.log("Données soumises :", formData);
@@ -36,7 +58,7 @@ const AuthForm = () => {
   return (
     <div className="bg-light">
       <Container className="d-flex align-items-center justify-content-center vh-100 p-0">
-      <Row className="align-items-center bg-primary w-75 h-75">
+      <Row className="align-items-center bg-primary w-75 h-lg-75 custom-rounded">
         {/* Section Image/Text */}
         <Col md={6} className="text-section h-100">
           <motion.h2
@@ -45,8 +67,9 @@ const AuthForm = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 50 }}
             transition={{ duration: 0.5 }}
+            className="my-3"
           >
-            {isLogin ? "Bienvenue !" : "Inscrivez-vous !"}
+            {isLogin ? "Bienvenue sur GCA !" : "Inscrivez-vous !"}
           </motion.h2>
         </Col>
 
@@ -72,6 +95,7 @@ const AuthForm = () => {
                     onChange={handleChange}
                     required
                   />
+                  {errors.name && <Alert variant="danger" className="mt-2 p-2">{errors.name}</Alert>}
                 </Form.Group>
               )}
               <Form.Group className="mb-3">
@@ -81,8 +105,9 @@ const AuthForm = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  required
+                  // required
                 />
+                {errors.email && <Alert variant="danger" className="mt-2 p-2">{errors.email}</Alert>}
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Control
@@ -91,8 +116,9 @@ const AuthForm = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  required
+                  // required
                 />
+                {errors.password && <Alert variant="danger" className="mt-2 p-2">{errors.password}</Alert>}
               </Form.Group>
               <Button variant="primary" className="w-100" type="submit">
                 {isLogin ? "Se connecter" : "S'inscrire"}
