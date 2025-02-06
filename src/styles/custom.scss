@@ -1,0 +1,14 @@
+@use "sass:math";
+
+// 1. Importer les fonctions de Bootstrap
+@import "bootstrap/scss/functions";
+
+// 2. Définir la nouvelle couleur primaire
+$primary: #45B3F8; // Remplace cette couleur par celle que tu veux
+
+// 3. Importer les variables de Bootstrap
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+// 4. Importer Bootstrap
+@import "bootstrap/scss/bootstrap";
