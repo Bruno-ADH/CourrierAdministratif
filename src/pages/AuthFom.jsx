@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Alert, Toast, Spinner } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { useNavigate } from 'react-router-dom';
 import "../styles/authForm.css";
+import { FaCheckCircle } from "react-icons/fa";
 import useAuthStore from "../store/useAuthStore";
 
 
@@ -16,9 +17,12 @@ const AuthForm = () => {
   });
   const [errors, setErrors] = useState({});
   const login = useAuthStore.use.login()
+  const [loading, setLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const toggleForm = () =>{
-    setIsLogin(!isLogin)
+    setIsLogin(!isLogin);
+    setErrors({});
   }
 
   // Fonction pour gérer les changements des inputs
@@ -47,18 +51,29 @@ const AuthForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    login()
-    navigate('/dashboard');
-    console.log("Données soumises :", formData);
+
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      if (isLogin) {
+        login();
+        navigate('/dashboard');
+      } else {
+        setShowToast(true);
+        setFormData({ name: "", email: "", password: "" });
+        setIsLogin(true);
+      }
+    }, 2000); 
   };
 
   return (
     <div className="bg-light">
       <Container className="d-flex align-items-center justify-content-center vh-100 p-0">
-      <Row className="align-items-center bg-primary w-75 h-lg-75 custom-rounded">
+      <Row className="align-items-center bg-primary w-75 custom-rounded">
         {/* Section Image/Text */}
         <Col md={6} className="text-section h-100">
           <motion.h2
@@ -74,7 +89,7 @@ const AuthForm = () => {
         </Col>
 
         {/* Section Formulaire */}
-        <Col md={6} className="d-flex form-section bg-white border-0 rounded-start-5 h-100 justify-content-center align-items-center">
+        <Col md={6} className="d-flex form-section bg-white border-0 rounded-start-5 h-100 justify-content-center align-items-center p-4 overflow-hidden">
           <motion.div
             key={isLogin ? "login-form" : "signup-form"}
             initial={{ opacity: 0, x: 50 }}
@@ -83,7 +98,7 @@ const AuthForm = () => {
             transition={{ duration: 0.5 }}
             className="w-100"
           >
-            <h2 className="mb-5">{isLogin ? "Connexion" : "Inscription"}</h2>
+            <h2 className="mb-4">{isLogin ? "Connexion" : "Inscription"}</h2>
             <Form onSubmit={handleSubmit}>
               {!isLogin && (
                 <Form.Group className="mb-3">
@@ -120,8 +135,8 @@ const AuthForm = () => {
                 />
                 {errors.password && <Alert variant="danger" className="mt-2 p-2">{errors.password}</Alert>}
               </Form.Group>
-              <Button variant="primary" className="w-100" type="submit">
-                {isLogin ? "Se connecter" : "S'inscrire"}
+              <Button variant="primary" className="w-100 text-white" type="submit" disabled={loading}>
+              {loading ? <Spinner animation="border" size="sm" /> : (isLogin ? "Se connecter" : "S'inscrire")}
               </Button>
             </Form>
             <p className="mt-3">
@@ -136,6 +151,18 @@ const AuthForm = () => {
         </Col>
       </Row>
     </Container>
+    <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        delay={3000}
+        autohide
+        bg="success"
+        className="position-fixed top-0 end-0 m-3"
+      >
+        <Toast.Body className="text-white">
+        <FaCheckCircle className="me-2" size={20} />Compte créé avec succès ! Connectez-vous maintenant.
+        </Toast.Body>
+      </Toast>
     </div>
   );
 };
