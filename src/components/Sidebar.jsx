@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav, Container, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { FiMenu, FiInbox, FiSend, FiHome, FiMail } from "react-icons/fi";
+import { FiMenu, FiInbox, FiSend, FiHome, FiMail, FiBox } from "react-icons/fi";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import useAuthStore from "../store/useAuthStore"
 
@@ -18,6 +18,7 @@ export default function Sidebar() {
 
     const menuItems = useMemo(() => [
         { name: "Tableau de bord", path: "/dashboard", icon: <FiHome size={22}/> },
+        { name: "Boîte de réception", path: "/dashboard/inbox", icon: <FiBox size={22}/> },
         { name: "Courriers reçus", path: "/dashboard/received", icon: <FiInbox size={22}/> },
         { name: "Courriers envoyés", path: "/dashboard/sent", icon: <FiSend size={22}/> },
         { name: "Envoyer courrier", path: "/dashboard/send", icon: <FiMail size={22}/> },
@@ -38,7 +39,7 @@ export default function Sidebar() {
             )}
             {/* Sidebar */}
             <div
-                className={`bg-secondary text-black overflow-hidden flex-column p-3 vh-100 ${isMobileMenuOpen ? "d-flex position-fixed" : "d-none d-md-flex position-relative"
+                className={`bg-secondary text-black overflow-hidden flex-column vh-100 ${isMobileMenuOpen ? "d-flex position-fixed" : "d-none d-md-flex position-relative"
                     }`}
                 style={{
                     width: isSidebarCollapsed ? "80px" : "250px",
@@ -46,9 +47,9 @@ export default function Sidebar() {
                     zIndex: 1040,
                 }}
             >
-                <Navbar.Brand className="text-center mb-4 text-black">{!isSidebarCollapsed && "LOGO"}</Navbar.Brand>
+                <Navbar.Brand className="text-center mb-4 text-black bg-primary text-black fs-5 fm-poppins-semibold py-3 pt-4">{isSidebarCollapsed ? "LOGO" : "LOGO"}</Navbar.Brand>
 
-                <Nav className="flex-column">
+                <Nav className="flex-column px-3 py-1">
                     {menuItems.map((item) => (
                         <OverlayTrigger
                             key={item.name}
@@ -72,7 +73,7 @@ export default function Sidebar() {
                 {/* Collapse Button */}
                 <Button
                     variant="light"
-                    className="mt-auto align-self-center px-2 py-1"
+                    className="mt-auto align-self-center px-2 py-1 mb-3"
                     onClick={toggleSidebar}
                     style={{ borderRadius: "50%" }}
                 >

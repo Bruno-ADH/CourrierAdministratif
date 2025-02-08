@@ -1,15 +1,19 @@
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Toast, ToastContainer } from "react-bootstrap";
 import { useState } from "react";
 import useMailStore from "../store/store";
 
 function SendMail() {
   const [mail, setMail] = useState({ origine: "", destinataire: "", type: "", objet: "", datePreference: "", fichier: null });
   const sendMail = useMailStore((state) => state.sendMail);
+  const [showToast, setShowToast] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     sendMail(mail);
-    alert("Courrier envoyé !");
+    setTimeout(() => {
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000);  // L'alerte disparaît après 4 secondes
+    }, 1000);
   };
 
   return (
@@ -28,6 +32,13 @@ function SendMail() {
         <Button variant="secondary" className="me-2">Annuler</Button>
         <Button variant="primary" type="submit">Envoyer</Button>
       </Form>
+
+      {/* Toast pour confirmer l'envoi du courrier */}
+      <ToastContainer position="top-end" className="p-3" style={{ zIndex: 1060 }}>
+        <Toast onClose={() => setShowToast(false)} show={showToast} delay={4000} autohide bg="success">
+          <Toast.Body className="text-white">Votre courrier a été bien envoyé !</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 }

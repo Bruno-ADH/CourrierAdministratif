@@ -13,6 +13,9 @@ import Sidebar from "./components/Sidebar";
 import AuthForm from "./pages/AuthFom";
 import useAuthStore from "./store/useAuthStore"
 import PageError from "./pages/PageError";
+import Inbox from "./pages/Inbox";
+import MailDetails from "./pages/MailDetails";
+import NotificationsPage from "./pages/NotificationsPage";
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useAuthStore.use.isAuthenticated()
@@ -37,6 +40,9 @@ const router = createBrowserRouter([
       { path: "received", element: <ReceivedMails /> },
       { path: "sent", element: <SentMails /> },
       { path: "send", element: <SendMail /> },
+      { path: "inbox", element: <Inbox /> },
+      { path: "inbox/:id", element: <MailDetails />  },
+      { path: "notifications", element: <NotificationsPage /> },
     ],
   },
   { path: "*", element: <PageError /> },
