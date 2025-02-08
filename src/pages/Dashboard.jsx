@@ -2,9 +2,9 @@ import { Card, Row, Col } from "react-bootstrap";
 
 function Dashboard() {
   return (
-    <div className="w-100 bg-danger h-100">
-      <h2 className="mb-4">TABLEAU DE BORD</h2>
-      <Row>
+    <div className="w-100 h-100">
+      <h2 className="bg-primary p-3 mb-4 text-center">TABLEAU DE BORD</h2>
+      <Row className="px-3">
         <Col md={4}>
           <Card className="bg-primary text-white text-center p-3">
             <Card.Body>5 Courriers reçus</Card.Body>
